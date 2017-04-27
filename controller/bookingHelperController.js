@@ -88,7 +88,7 @@ var request = {
     "content": "content 1"
 }
 exports.getRequests = function (req, res) {
-    res.status(200).json(dummyData);
+    res.status(200).json(allData);
 }
 
 exports.findNewRequest = function (req, res) {

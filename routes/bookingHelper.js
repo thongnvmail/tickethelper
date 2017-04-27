@@ -8,10 +8,10 @@ router.get('/', function(req, res, next) {
 });
 
 /** Load all request */
-router.get('/getRequests', bookingHelperController.getRequests);
+router.get('/getRequest', bookingHelperController.getRequests);
 /** Find new requests */
 router.get('/findNewRequest', bookingHelperController.findNewRequest);
 /** Find new requests */
-router.get('/loadRequest/:id', bookingHelperController.loadRequest);
+router.get('/getRequest/:id', bookingHelperController.loadRequest);
 
 module.exports = router;
