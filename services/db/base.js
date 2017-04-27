@@ -14,6 +14,7 @@ var fetch =  function(entity, criteria) {
 	return model[entity].findAll(criteria).then(function(dataList) {
             return dataList;
 	}).catch(function(error) {
+        console.log(error);
         throw result.databaseErrorMessageFactory();
     });
 }

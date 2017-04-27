@@ -34,6 +34,16 @@ var fetchOne = function(id) {
     return base.fetchOne(TABLE_NAME, condition);
 };
 
+var fetchByIsRead = function(isRead) {
+    console.log('fetchByIsRead')
+    var condition = {
+        where: {
+            isRead: isRead
+        }
+    };
+    return base.fetch(TABLE_NAME, condition);
+};
+
 /**
  * update information for Book by BookID
  * @param  {String} id      id of Book
@@ -88,4 +98,5 @@ module.exports = {
     fetchOne: fetchOne,
     updateBook: updateBook,
     addBook: addBook,
+    fetchByIsRead: fetchByIsRead
 };
