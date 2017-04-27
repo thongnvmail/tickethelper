@@ -1,0 +1,11 @@
++ Receive data:
+{ 
+   "requester": "",//khach hang    
+   "subject": "",// tieu de    
+   "book_type": '',// loai dat ve    
+   "product_booking": "",// loai xe    
+   "address_booking": "",// dia chi    
+   "content": "", // noi dung
+}
+
+POST  https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted. Data is waiting fonfirm.
