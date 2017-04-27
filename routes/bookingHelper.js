@@ -8,10 +8,13 @@ router.get('/', function(req, res, next) {
 });
 
 /** Load all request */
-router.get('/getRequest', bookingHelperController.getRequests);
+router.get('/request', bookingHelperController.getRequests);
 /** Find new requests */
 router.get('/findNewRequest', bookingHelperController.findNewRequest);
 /** Find new requests */
-router.get('/getRequest/:id', bookingHelperController.loadRequest);
+router.get('/request/:id', bookingHelperController.loadRequest);
+
+/** Add book */
+router.post('/request', bookingHelperController.addRequest);
 
 module.exports = router;
