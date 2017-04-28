@@ -65,6 +65,7 @@ exports.addRequest = function (req, res) {
     var book = req.body;
     book.isRead = false;
     console.log('Add book');
+    book.isRead = false;
     bookService.addBook(book).then(function(d){
         console.log(JSON.stringify(d));
         res.status(201).json(d);
