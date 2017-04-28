@@ -1,0 +1,9 @@
+.unread {
+    font-weight: bold;
+    background-color: #999;
+}
+
+.read {
+    font-weight: normal;
+    background-color: #FFF;
+}
