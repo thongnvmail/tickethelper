@@ -2,6 +2,93 @@
 
 <html lang="en">
 <% include header.ejs %>
+<head>
+    <script type="text/javascript">
+
+        // function loadData() {
+        //     var url = "/bookingHelper/request";
+        //     var request = $.ajax({
+        //         url : url,
+        //         method : "GET",
+        //         dataType : "JSON"
+        //     })
+
+        //     request.done((result) => {
+        //         console.log(result);
+        //         console.log(result.book_now);
+        //         var book_now = result.book_now;
+        //         var str = ``;
+        //         book_now.map((valuse, index) => {
+        //             console.log(valuse.subject);
+        //             let id = valuse.id;
+        //             let subject = valuse.subject;
+        //             let requester = valuse.requester;
+        //             str += `
+        //                 <tr onclick="onClickTable('${id}')">
+        //                     <td><b> ${subject} </b></td>
+        //                     <td>${requester}</td>
+        //                 </tr>
+        //             `;
+        //         })
+
+        //         $("#datatable").html(str);
+        //         $("#total").html(book_now.length);
+        //     })
+
+        //     request.fail((jqXHR, textStatus) => {
+        //         console(textStatus);
+        //     })
+        // }
+
+        // function onClickTable(id) {
+        //     console.log(id);
+        //     var url = "/bookingHelper/request/" + id;
+        //     var request = $.ajax({
+        //         url : url,
+        //         method : "GET",
+        //         dataType : "JSON"
+        //     })
+
+        //     request.done((result) => {
+        //         console.log(result);
+        //         let id = result.id;
+        //         let subject = result.subject;
+        //         let requester = result.requester;
+        //         let product_booking = result.product_booking;
+        //         let address_booking = result.address_booking;
+        //         let content = result.content;
+        //         let isRead = result.isRead;
+
+        //         $("#id").html(id);
+        //         $("#subject").html(subject);
+        //         $("#requester").html(requester);
+        //         $("#product_booking").html(product_booking);
+        //         $("#address_booking").html(address_booking);
+        //         $("#content").html(content);
+        //     })
+
+        //     request.fail((jqXHR, textStatus) => {
+        //         console(textStatus);
+        //     })
+        // }
+
+        // function cancle() {
+        //     // alert('Hủy yêu cầu thành công');
+        //     var id = $("#id").html();
+        //     var message = 'Hủy yêu cầu thành công';
+        //     notify(message + " " + id, 'success');
+        // }
+
+        // function approve() {
+        //     // alert('Đã gửi yêu cầu thành công');
+        //     var id = $("#id").html();
+        //     var message = 'Đã gửi yêu cầu thành công';
+        //     notify(message + " " + id, 'success');
+        // }
+
+        // loadData();
+    </script>
+</head>
 <body>
 
 <div class="wrapper">
@@ -9,7 +96,7 @@
     <% include menu.ejs %>
 
     <div class="main-panel">
-        <nav class="navbar navbar-default navbar-fixed">
+        <!-- <nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
@@ -86,10 +173,10 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> -->
 
 
-        <div class="content">
+        <div class="content" id="bodycontent">
             <div class="container-fluid">
                 <div class="row">
 
@@ -102,63 +189,8 @@
 
                                 <div class="content table-responsive table-full-width" style="height: 400px; overflow: auto;">
                                     <table class="table table-hover">
-                                        <tbody>
-                                            <tr onclick="onClickTable('noi dung dong thu nhat')">
-                                                <td>1</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-                                             <tr>
-                                                <td>2</td>
-                                                <td>Tiêu đề</td>
-                                                <td>10/10*2017</td>
-                                            </tr>
-
+                                        <tbody id='datatable'>
+                                    
                                         </tbody>
                                     </table>
                                 </div>
@@ -166,7 +198,7 @@
                                 <div class="footer">
                                     <hr>
                                     <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                                        <i class="fa fa-clock-o"></i>Tổng số: <b id="total"></b>
                                     </div>
                                 </div>
                             </div>
@@ -176,12 +208,36 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Tiêu đề</h4>
-                                <p class="category">10/10/2017</p>
+                                <h4 style="text-transform: capitalize;" class="title" id="subject">Tiêu đề</h4>
                             </div>
-                            <div class="content" id="content">
-                                Nội dung
-                            </div>
+                            <br>
+                            <table class="table">
+                                <tr>
+                                    <td style="width: 20%;">ID</td>
+                                    <td><b id="id"></b></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">Người gửi</td>
+                                    <td><b id="requester"></b></td>
+                                </tr>
+                                <tr>
+                                    <td style="">Loại xe</td>
+                                    <td><b id="product_booking"></b></td>
+                                </tr>
+                                <tr>
+                                    <td>Địa điểm</td>
+                                    <td><b id="address_booking"></b></td>
+                                </tr>
+                                <tr>
+                                    <td>Nội dung</td>
+                                    <td><b id="content"></b></td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger" onclick="cancle()">Hủy yêu cầu</button></td>
+                                    <td><button type="button" class="btn btn-success" onclick="approve()">Chấp nhận</button></td>
+                                </tr>
+                            </table>
+                            
                         </div>
                     </div>
 

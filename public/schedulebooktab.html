@@ -1,0 +1,158 @@
+
+<head>
+    <script type="text/javascript">
+
+        function loadData() {
+            var url = "/bookingHelper/request";
+            var request = $.ajax({
+                url : url,
+                method : "GET",
+                dataType : "JSON"
+            })
+
+            request.done((result) => {
+                console.log(result);
+                console.log(result.schedule_book);
+                var schedule_book = result.schedule_book;
+                var str = ``;
+                schedule_book.map((valuse, index) => {
+                    console.log(valuse.subject);
+                    let id = valuse.id;
+                    let subject = valuse.subject;
+                    let requester = valuse.requester;
+                    str += `
+                        <tr onclick="onClickTable('${id}')">
+                            <td><b> ${subject} </b></td>
+                            <td>${requester}</td>
+                        </tr>
+                    `;
+                })
+
+                $("#datatable").html(str);
+                $("#total").html(schedule_book.length);
+            })
+
+            request.fail((jqXHR, textStatus) => {
+                console(textStatus);
+            })
+        }
+
+        function onClickTable(id) {
+            console.log(id);
+            var url = "/bookingHelper/request/" + id;
+            var request = $.ajax({
+                url : url,
+                method : "GET",
+                dataType : "JSON"
+            })
+
+            request.done((result) => {
+                console.log(result);
+                let id = result.id;
+                let subject = result.subject;
+                let requester = result.requester;
+                let product_booking = result.product_booking;
+                let address_booking = result.address_booking;
+                let content = result.content;
+                let isRead = result.isRead;
+
+                $("#id").html(id);
+                $("#subject").html(subject);
+                $("#requester").html(requester);
+                $("#product_booking").html(product_booking);
+                $("#address_booking").html(address_booking);
+                $("#content").html(content);
+            })
+
+            request.fail((jqXHR, textStatus) => {
+                console(textStatus);
+            })
+        }
+
+        function cancle() {
+            // alert('Hủy yêu cầu thành công');
+            var id = $("#id").html();
+            var message = 'Hủy yêu cầu thành công';
+            notify(message + " " + id, 'success');
+        }
+
+        function approve() {
+            // alert('Đã gửi yêu cầu thành công');
+            var id = $("#id").html();
+            var message = 'Đã gửi yêu cầu thành công';
+            notify(message + " " + id, 'success');
+        }
+
+        loadData();
+    </script>
+</head>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Danh sách đặt xe</h4>
+                    </div>
+                    <div class="content">
+
+                        <div class="content table-responsive table-full-width" style="height: 400px; overflow: auto;">
+                            <table class="table table-hover">
+                                <tbody id='datatable'>
+                            
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="footer">
+                            <hr>
+                            <div class="stats">
+                                <i class="fa fa-clock-o"></i>Tổng số: <b id="total"></b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <h4 style="text-transform: capitalize;" class="title" id="subject">Tiêu đề</h4>
+                    </div>
+                    <br>
+                    <table class="table">
+                        <tr>
+                            <td style="width: 20%;">ID</td>
+                            <td><b id="id"></b></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%;">Người gửi</td>
+                            <td><b id="requester"></b></td>
+                        </tr>
+                        <tr>
+                            <td style="">Loại xe</td>
+                            <td><b id="product_booking"></b></td>
+                        </tr>
+                        <tr>
+                            <td>Địa điểm</td>
+                            <td><b id="address_booking"></b></td>
+                        </tr>
+                        <tr>
+                            <td>Nội dung</td>
+                            <td><b id="content"></b></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="btn btn-danger" onclick="cancle()">Hủy yêu cầu</button></td>
+                            <td><button type="button" class="btn btn-success" onclick="approve()">Chấp nhận</button></td>
+                        </tr>
+                    </table>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

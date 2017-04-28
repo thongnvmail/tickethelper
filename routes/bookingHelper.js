@@ -17,4 +17,7 @@ router.get('/request/:id', bookingHelperController.loadRequest);
 /** Add book */
 router.post('/request', bookingHelperController.addRequest);
 
+/** Put book */
+router.put('/request/:id', bookingHelperController.putBook);
+
 module.exports = router;

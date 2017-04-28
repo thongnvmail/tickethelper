@@ -55,43 +55,126 @@
             //     type: 'info',
             //     timer: 4000
             // });
+            function loadBookNowTab() {
+                $("#bodycontent").load("booknowtab.html");
 
+                $('#menubooknow').addClass('active');
+                $('#menuschedulebook').removeClass('active');
+            }
+
+            function loadScheduleBookTab() {
+                $("#bodycontent").load("schedulebooktab.html");
+
+                $('#menuschedulebook').addClass('active');
+                $('#menubooknow').removeClass('active');
+            }
+
+            $("#booknowtab").click(() => {
+                loadBookNowTab();  
+            })
+            
+            $("#schedulebooktab").click(() => {
+                loadScheduleBookTab();
+            })
+            
+            function init() {
+                loadBookNowTab();
+            }
+
+            init();
         });
-    </script>
 
-    <script type="text/javascript">
-
-        function onClickTable(id) {
-            $("#content").html(id);
+        function notify(message, type) {
+            if(!type) {
+                type = "info";
+            }
+            $.notify({
+                icon: 'pe-7s-bell',
+                message: message
+            },{
+                type: type,
+                timer: 1000
+            });
         }
 
-        function eventAdd() {
-            var title = $("#title").val();
-            var content = CKEDITOR.instances.content.getData();
-            alert(title + content);
-            var data = {
-                title : title,
-                content : content
-            };
-            var url = "/post/add/";
+        function loadNewData() {
+            var url = "/bookingHelper/findNewRequest";
             var request = $.ajax({
                 url : url,
-                method : "POST",
-                data : data,
+                method : "GET",
                 dataType : "JSON"
             })
 
             request.done((result) => {
-                console.log(result);
-                reload();
-                alert(result.message);
+                console.log(result.book_now);
+                var book_now = result.book_now;
+                var schedule_book = result.schedule_book;
+                var str = ``;
+                book_now.map((valuse, index) => {
+                    let id = valuse.id;
+                    let subject = valuse.subject;
+                    let requester = valuse.requester;
+                    str += `
+                        <tr onclick="onClickTable('${id}')">
+                            <td><b> ${subject} </b></td>
+                            <td>${requester}</td>
+                        </tr>
+                    `;
+                })
+
+                // $("#datatable").prepend(str);
+                // $("#total").html(book_now.length);
+                // $("#notifybooknow").html(book_now.length);
+                // $("#notifyschedulebook").html(schedule_book.length);
+                setNumberNotify(book_now.length, schedule_book.length);
             })
 
             request.fail((jqXHR, textStatus) => {
-                alert(textStatus);
+                console(textStatus);
             })
         }
 
+        function setNumberNotify(numberBookNow, numberScheduleBook) {
+            $("#notifybooknow").html(numberBookNow);
+            $("#notifyschedulebook").html(numberScheduleBook);
+        }
+
+        function autoLoad() {
+            setTimeout(function(){ 
+                loadNewData();
+                autoLoad();
+            }, 500);
+        }
+
+        loadNewData();
+        autoLoad();
+
+        // function eventAdd() {
+        //     var title = $("#title").val();
+        //     var content = CKEDITOR.instances.content.getData();
+        //     alert(title + content);
+        //     var data = {
+        //         title : title,
+        //         content : content
+        //     };
+        //     var url = "/post/add/";
+        //     var request = $.ajax({
+        //         url : url,
+        //         method : "POST",
+        //         data : data,
+        //         dataType : "JSON"
+        //     })
+
+        //     request.done((result) => {
+        //         console.log(result);
+        //         reload();
+        //         alert(result.message);
+        //     })
+
+        //     request.fail((jqXHR, textStatus) => {
+        //         alert(textStatus);
+        //     })
+        // }
     </script>
 
 </head>
