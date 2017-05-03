@@ -4,6 +4,16 @@ var lengtItemCurrent = 0;
 var isInit = true;
 var statusTab = false;
 
+/* status from number to string */
+var SEND = 1;
+var UNSEND = 0;
+var CANCEL = -1;
+var STATUSSTRING = {
+    SEND : "Đã điều xe",
+    UNSEND : "Chưa điều xe",
+    CANCEL : "Đã hủy yêu cầu"
+}
+
 var BOOKNOW = "booknow";
 var SCHEDULEBOOK = "schedulebook";
 var tab = BOOKNOW; 
@@ -14,6 +24,8 @@ function loadBookNowTab() {
     tab = BOOKNOW;
     statusTab = true;
     loadDataTable();
+    resetDetail();
+    enableButtonSend(false);
 }
 
 function loadScheduleBookTab() {
@@ -22,6 +34,12 @@ function loadScheduleBookTab() {
     tab = SCHEDULEBOOK;
     statusTab = true;
     loadDataTable();
+    resetDetail();
+    enableButtonSend(false);
+}
+
+function resetDetail() {
+    setFormDetail("");
 }
 
 function setNumberNotify(numberBookNow, numberScheduleBook) {
@@ -31,8 +49,34 @@ function setNumberNotify(numberBookNow, numberScheduleBook) {
 
 function approve() {
     var id = $("#idRequester").val();
-    var message = 'Đã gửi yêu cầu thành công ' + id;
-    notify(message, 'success');
+
+    if(!id) {
+        notify("Mã tài xế không được rỗng!", "danger");
+        return;
+    }
+
+    var url = "/bookingHelper/car";
+    data = {
+        id : id
+    };
+    console.log(data);
+    var request = $.ajax({
+        url : url,
+        method : "POST",
+        data: data,
+        dataType : "JSON"
+    })
+
+    request.done((result) => {
+        console.log(result);
+        console.log("Gửi thành công");
+        var message = 'Đã gửi yêu cầu thành công ' + id;
+        notify(message, 'success');
+    })
+
+    request.fail((jqXHR, textStatus) => {
+        console.log(textStatus);
+    })
 }
 
 function setDataTable(data) {
@@ -118,26 +162,80 @@ function updateStatus(data) {
     })
 }
 
+function changeStatusToString(status) {
+    let classColor = "";
+    let result = "";
+
+    if(status === "") {
+        return "";
+    }
+    if(status == SEND) {
+        classColor = "send";
+        result = STATUSSTRING.SEND;
+    }
+    if(status == UNSEND) {
+        classColor = "unsend";
+        result = STATUSSTRING.UNSEND;
+    }
+    if(status == CANCEL) {
+        classColor = "cancel";
+        result = STATUSSTRING.CANCEL;
+    }
+
+    $("#status").attr('class', classColor);
+    return result;
+}
+
+function setFormDetail(data) {
+
+    if(!data) 
+    {
+         data = {
+            address_booking : "",
+            book_type : "",
+            content : "",
+            id : "",
+            product_booking : "",
+            requester : "",
+            status : 0,
+            subject : "Tiêu đề",
+            status : ""
+        }
+    }
+
+    $("#id").html(data.id);
+    $("#subject").html(data.subject);
+    $("#requester").html(data.requester);
+    $("#product_booking").html(data.product_booking);
+    $("#address_booking").html(data.address_booking);
+    $("#content").html(data.content);
+    $("#status").html(changeStatusToString(data.status));
+
+    $("#idRequester").val("");
+}
+
 function setFormData(data) {
-    // console.log(data);
-    let id = data.id;
-    let subject = data.subject;
-    let requester = data.requester;
-    let product_booking = data.product_booking;
-    let address_booking = data.address_booking;
-    let content = data.content;
-    let isRead = data.isRead;
 
-    $("#id").html(id);
-    $("#subject").html(subject);
-    $("#requester").html(requester);
-    $("#product_booking").html(product_booking);
-    $("#address_booking").html(address_booking);
-    $("#content").html(content);
+    setFormDetail(data);
 
-    if(!isRead) {
+    if(!data.isRead) {
         updateStatus(data);
     }
+
+    if(data.id) {
+        enableButtonSend(true);
+    } else {
+        enableButtonSend(false);
+    }
+}
+
+function  enableButtonSend(isEnable) {
+    let disabled = "disabled";
+    if(isEnable) {
+        disabled = false;
+    } 
+    $("#idRequester").attr('disabled', disabled);
+    $("#btnSend").attr('disabled', disabled);
 }
 
 function onClickTable(id, event) {
@@ -151,6 +249,7 @@ function onClickTable(id, event) {
     })
 
     request.done((result) => {
+        console.log(result);
         setFormData(result);
     })
 
@@ -172,23 +271,6 @@ function loadNewData() {
         var book_now = result.book_now;
         var schedule_book = result.schedule_book;
 
-        // var str = ``;
-        // book_now.map((valuse, index) => {
-        //     let id = valuse.id;
-        //     let subject = valuse.subject;
-        //     let requester = valuse.requester;
-        //     str += `
-        //         <tr onclick="onClickTable('${id}')">
-        //             <td><b> ${subject} </b></td>
-        //             <td>${requester}</td>
-        //         </tr>
-        //     `;
-        // })
-
-        // $("#datatable").prepend(str);
-        // $("#total").html(book_now.length);
-        // $("#notifybooknow").html(book_now.length);
-        // $("#notifyschedulebook").html(schedule_book.length);
         setNumberNotify(book_now.length, schedule_book.length);
     })
 
@@ -196,6 +278,29 @@ function loadNewData() {
         console.log(textStatus);
     })
 }
+
+function getCarById() {
+    // var 
+    var url = "/bookingHelper/car/";
+    
+    var request = $.ajax({
+        url : url,
+        method : "POST",
+        dataType : "JSON"
+    })
+
+    request.done((result) => {
+        // console.log(result.book_now);
+        var book_now = result.book_now;
+        var schedule_book = result.schedule_book;
+        setNumberNotify(book_now.length, schedule_book.length);
+    })
+
+    request.fail((jqXHR, textStatus) => {
+        console.log(textStatus);
+    })
+}
+
 
 function autoLoad() {
     setTimeout(function(){ 
@@ -208,8 +313,9 @@ function autoLoad() {
 
 
 function init() {
+    enableButtonSend(false);
     loadNewData();
     autoLoad();
 }
 
-init();
+// init();

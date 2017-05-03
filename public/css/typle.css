@@ -7,3 +7,15 @@
     font-weight: normal;
     background-color: #FFF;
 }
+
+.send {
+	color: #00CC00;
+}
+
+.unsend {
+	color: #FF9900;
+}
+
+.cancel {
+	color: #FF0000;
+}

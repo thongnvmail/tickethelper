@@ -41,6 +41,12 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.BOOLEAN,
 			field: 'is_read',
 			allowNull: true
+		},
+		status: {
+			type: DataTypes.INTEGER,
+			field: 'status',
+			allowNull: true,
+			defaultValue: 0
 		}
 	}, {
 		timestamps: false,
