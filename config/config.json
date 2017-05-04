@@ -1,9 +1,19 @@
-{
-	"db": {
-		"host": "localhost",
-		"dbName": "book",
-		"dbUser": "root",
-		"dbSecret": "",
-		"dialect": "mysql"
+// {
+// 	"db": {
+// 		"host": "localhost",
+// 		"dbName": "book",
+// 		"dbUser": "root",
+// 		"dbSecret": "",
+// 		"dialect": "mysql"
+// 	}
+// }
+
+{	
+	"db": {		
+		"host": "us-cdbr-iron-east-03.cleardb.net",		
+		"dbName": "heroku_f7469a0c6b39995",		
+		"dbUser": "bdb9c80bf0ca8f",		
+		"dbSecret": "e5d2dc96",		
+		"dialect": "mysql"	
 	}
 }
