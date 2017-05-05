@@ -305,7 +305,7 @@ function autoLoad() {
         loadNewData();
         loadDataTable();
         autoLoad();
-    }, 2000);
+    }, 500);
 }
 
 
