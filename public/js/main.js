@@ -1,4 +1,3 @@
-
 var lengthItemNew = 0;
 var lengtItemCurrent = 0;
 var isInit = true;
@@ -9,14 +8,14 @@ var SEND = 1;
 var UNSEND = 0;
 var CANCEL = -1;
 var STATUSSTRING = {
-    SEND : "Đã điều xe",
-    UNSEND : "Chưa điều xe",
-    CANCEL : "Đã hủy yêu cầu"
+    SEND: "Đã điều xe",
+    UNSEND: "Chưa điều xe",
+    CANCEL: "Đã hủy yêu cầu"
 }
 
 var BOOKNOW = "booknow";
 var SCHEDULEBOOK = "schedulebook";
-var tab = BOOKNOW; 
+var tab = BOOKNOW;
 
 function loadBookNowTab() {
     $('#menubooknow').addClass('active');
@@ -50,21 +49,21 @@ function setNumberNotify(numberBookNow, numberScheduleBook) {
 function approve() {
     var id = $("#idRequester").val();
 
-    if(!id) {
+    if (!id) {
         notify("Mã tài xế không được rỗng!", "danger");
         return;
     }
 
     var url = "/bookingHelper/car";
     data = {
-        id : id
+        id: id
     };
     console.log(data);
     var request = $.ajax({
-        url : url,
-        method : "POST",
+        url: url,
+        method: "POST",
         data: data,
-        dataType : "JSON"
+        dataType: "JSON"
     })
 
     request.done((result) => {
@@ -89,7 +88,7 @@ function setDataTable(data) {
         let requester = valuse.requester;
         let isRead = valuse.isRead;
         let classStatus = "unread";
-        if(isRead) {
+        if (isRead) {
             classStatus = "read";
         }
         str += `
@@ -108,26 +107,26 @@ function setDataTable(data) {
 function loadDataTable() {
     var url = "/bookingHelper/request";
     var request = $.ajax({
-        url : url,
-        method : "GET",
-        dataType : "JSON"
+        url: url,
+        method: "GET",
+        dataType: "JSON"
     })
 
     request.done((result) => {
         var data = result.book_now;
-        if(tab != BOOKNOW) {
+        if (tab != BOOKNOW) {
             data = result.schedule_book;
         }
         var length = data.length;
         console.log(lengtItemCurrent);
-        if(isInit) {
+        if (isInit) {
             setDataTable(data);
             isInit = false;
         } else {
-            if(length > lengtItemCurrent) {
+            if (length > lengtItemCurrent) {
                 setDataTable(data);
             } else {
-                if(statusTab) {
+                if (statusTab) {
                     setDataTable(data);
                     lengtItemCurrent = length;
                     statusTab = false;
@@ -145,10 +144,10 @@ function updateStatus(data) {
     var url = "/bookingHelper/request/" + data.id;
     data.isRead = true;
     var request = $.ajax({
-        url : url,
-        method : "PUT",
+        url: url,
+        method: "PUT",
         data: data,
-        dataType : "JSON"
+        dataType: "JSON"
     })
 
     request.done((result) => {
@@ -166,18 +165,18 @@ function changeStatusToString(status) {
     let classColor = "";
     let result = "";
 
-    if(status === "") {
+    if (status === "") {
         return "";
     }
-    if(status == SEND) {
+    if (status == SEND) {
         classColor = "send";
         result = STATUSSTRING.SEND;
     }
-    if(status == UNSEND) {
+    if (status == UNSEND) {
         classColor = "unsend";
         result = STATUSSTRING.UNSEND;
     }
-    if(status == CANCEL) {
+    if (status == CANCEL) {
         classColor = "cancel";
         result = STATUSSTRING.CANCEL;
     }
@@ -188,18 +187,17 @@ function changeStatusToString(status) {
 
 function setFormDetail(data) {
 
-    if(!data) 
-    {
-         data = {
-            address_booking : "",
-            book_type : "",
-            content : "",
-            id : "",
-            product_booking : "",
-            requester : "",
-            status : 0,
-            subject : "Tiêu đề",
-            status : ""
+    if (!data) {
+        data = {
+            address_booking: "",
+            book_type: "",
+            content: "",
+            id: "",
+            product_booking: "",
+            requester: "",
+            status: 0,
+            subject: "Tiêu đề",
+            status: ""
         }
     }
 
@@ -218,22 +216,22 @@ function setFormData(data) {
 
     setFormDetail(data);
 
-    if(!data.isRead) {
+    if (!data.isRead) {
         updateStatus(data);
     }
 
-    if(data.id) {
+    if (data.id) {
         enableButtonSend(true);
     } else {
         enableButtonSend(false);
     }
 }
 
-function  enableButtonSend(isEnable) {
+function enableButtonSend(isEnable) {
     let disabled = "disabled";
-    if(isEnable) {
+    if (isEnable) {
         disabled = false;
-    } 
+    }
     $("#idRequester").attr('disabled', disabled);
     $("#btnSend").attr('disabled', disabled);
 }
@@ -243,9 +241,9 @@ function onClickTable(id, event) {
     $(event).removeClass();
     var url = "/bookingHelper/request/" + id;
     var request = $.ajax({
-        url : url,
-        method : "GET",
-        dataType : "JSON"
+        url: url,
+        method: "GET",
+        dataType: "JSON"
     })
 
     request.done((result) => {
@@ -261,9 +259,9 @@ function onClickTable(id, event) {
 function loadNewData() {
     var url = "/bookingHelper/findNewRequest";
     var request = $.ajax({
-        url : url,
-        method : "GET",
-        dataType : "JSON"
+        url: url,
+        method: "GET",
+        dataType: "JSON"
     })
 
     request.done((result) => {
@@ -282,11 +280,11 @@ function loadNewData() {
 function getCarById() {
     // var 
     var url = "/bookingHelper/car/";
-    
+
     var request = $.ajax({
-        url : url,
-        method : "POST",
-        dataType : "JSON"
+        url: url,
+        method: "POST",
+        dataType: "JSON"
     })
 
     request.done((result) => {
@@ -303,11 +301,11 @@ function getCarById() {
 
 
 function autoLoad() {
-    setTimeout(function(){ 
+    setTimeout(function() {
         loadNewData();
         loadDataTable();
         autoLoad();
-    }, 500);
+    }, 2000);
 }
 
 
