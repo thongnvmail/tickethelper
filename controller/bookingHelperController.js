@@ -12,7 +12,7 @@ function checkScheduleBook(book) {
 }
 exports.getRequests = function(req, res) {
     bookService.fetchBooks().then(function(bookList) {
-            console.log(JSON.stringify(bookList));
+            // console.log(JSON.stringify(bookList));
             var bookNows = bookList.filter(checkBookNow);
             var scheduleBook = bookList.filter(checkScheduleBook);
             res.status(200).json({ book_now: bookNows, schedule_book: scheduleBook });
@@ -25,7 +25,7 @@ exports.getRequests = function(req, res) {
 
 exports.findNewRequest = function(req, res) {
     bookService.fetchByIsRead(false).then(function(bookList) {
-            console.log('new books: ' + JSON.stringify(bookList));
+            // console.log('new books: ' + JSON.stringify(bookList));
             var bookNows = bookList.filter(checkBookNow);
             var scheduleBook = bookList.filter(checkScheduleBook);
             res.status(200).json({ book_now: bookNows, schedule_book: scheduleBook });
