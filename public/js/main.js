@@ -71,8 +71,11 @@ function approve() {
         data: data,
         dataType: "JSON",
         statusCode: {
-            404: function() {
+            404: () => {
                 notify("Không tìm thấy mã tài xế!", 'danger');
+            },
+            500: () => {
+                notify("Gửi request thất bại!", 'danger');
             }
         }
     })
@@ -317,7 +320,7 @@ function autoLoad() {
 function init() {
     enableButtonSend(false);
     loadNewData();
-    autoLoad();
+    // autoLoad();
 }
 
 init();

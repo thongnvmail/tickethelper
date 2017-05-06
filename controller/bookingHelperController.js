@@ -1,6 +1,7 @@
 var bookService = require('../services/db/book');
 var carService = require('../services/db/car');
-var http = require("http");
+// var http = require("https");
+var request = require('request');
 const token = '93cd84d7-7c92-429d-b252-50da999aa568';
 
 function checkBookNow(book) {
@@ -102,7 +103,23 @@ exports.postIdCar = function(req, res) {
     var bookId = req.body.bookId;
     var bookDb = {};
     var requestData = {};
-    bookService.updateBook(bookId, { status: 1 }).then((updateStatus) => {
+
+    carService.fetchOne(carId).then((car) => {
+            if (!car) {
+                res.status(404).end();
+                return null;
+            } else {
+                console.log('Car: ' + JSON.stringify(car));
+                requestData.vehicle_plate = car.vehicleNumber;
+                requestData.driver_code = car.id;
+                console.log('requestData: ' + JSON.stringify(requestData));
+                return bookService.updateBook(bookId, { status: 1, car_id: car.id });
+            }
+        })
+        .then((updateStatus) => {
+            if (!updateStatus) {
+                return null;
+            }
             console.log('Update status: ' + JSON.stringify(updateStatus));
             if (updateStatus.responseCode !== 0) {
                 res.status(500).end();
@@ -111,63 +128,97 @@ exports.postIdCar = function(req, res) {
             }
         })
         .then((book) => {
+            if (!book) {
+                return null;
+            }
             console.log('Book by id: ' + JSON.stringify(book));
             requestData.sender = book.SenderId;
             requestData.ticket_id = book.id;
+
             requestData.requester = book.requester;
             requestData.product_name = book.product_booking;
             requestData.driver_name = null;
             requestData.driver_mobile = null;
+
             console.log('requestData: ' + JSON.stringify(requestData));
-            console.log('Car id: ' + carId);
-            return carService.fetchOne(carId);
-        })
-        .then((car) => {
-            if (!car) {
-                res.status(404).end();
-            } else {
-                console.log('Car: ' + JSON.stringify(car));
-                requestData.vehicle_plate = car.vehicleNumber;
-                requestData.driver_code = car.id;
-                console.log('requestData: ' + JSON.stringify(requestData));
-
-                sendInformAcceptRequest(requestData);
-
-                res.status(200).json(requestData);
+            var headers = {
+                'Authorization': token
             }
 
+            // Configure the request
+            var options = {
+                url: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
+                method: 'POST',
+                headers: headers
+            }
+
+            // Start the request
+            request(options, function(error, response, body) {
+                console.log('Respone body: ' + JSON.stringify(body));
+                if (body.error_code === 0) {
+                    res.status(200).json(requestData);
+                } else {
+                    console.log('Error');
+                    res.status(500).json({ message: 'Request failed' }).end();
+                }
+            });
         })
         .catch((err) => {
             // console.log(console.log(JSON.stringify(err)));
-            console.log('NO_CONTENT');
+            console.log('ERROR');
+            console.log(err);
             res.status(404).end();
         });
 }
 
 function sendInformAcceptRequest(data) {
 
-    var options = {
-        hostname: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
-        port: 80,
-        path: '/',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
-    };
-    var req = http.request(options, function(res) {
-        console.log('Status: ' + res.statusCode);
-        console.log('Headers: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function(body) {
-            console.log('Body: ' + body);
-        });
-    });
-    req.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
-    });
+    // var options = {
+    //     hostname: 'gk2s-fb-bot3.herokuapp.com',
+    //     port: 80,
+    //     path: '/bot/informAccepted',
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': token
+    //     }
+    // };
+    // var req = http.request(options, function(res) {
+    //     console.log('Status: ' + res.statusCode);
+    //     console.log('Headers: ' + JSON.stringify(res.headers));
+    //     res.setEncoding('utf8');
+    //     res.on('data', function(body) {
+    //         console.log('Body: ' + body);
+    //     });
+    // });
+    // req.on('error', function(e) {
+    //     console.log('problem with request: ' + e.message);
+    // });
 
-    req.write(data);
-    req.end();
+    // req.write(data);
+    // req.end();
+
+    // Set the headers
+    // var headers = {
+    //     'Authorization': token
+    // }
+
+    // // Configure the request
+    // var options = {
+    //     url: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
+    //     method: 'POST',
+    //     headers: headers
+    // }
+
+    // // Start the request
+    // return request(options, function(error, response, body) {
+    //     console.log('Respone body: ' + JSON.stringify(body));
+    //     if (body.error_code === 0) {
+    //         console.log('OK');
+    //         return true;
+    //     } else {
+    //         console.log('Error');
+    //         return false;
+    //     }
+    // })
 }
