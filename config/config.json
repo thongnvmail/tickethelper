@@ -1,9 +1,9 @@
 {
     "db": {
-        "host": "localhost",
-        "dbName": "book",
-        "dbUser": "root",
-        "dbSecret": "",
+        "host": "us-cdbr-iron-east-03.cleardb.net",
+        "dbName": "heroku_3cdd70a1f801563",
+        "dbUser": "bdb9c80bf0ca8f",
+        "dbSecret": "e5d2dc96",
         "dialect": "mysql"
     }
 }
