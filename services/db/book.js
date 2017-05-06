@@ -35,7 +35,6 @@ var fetchOne = function(id) {
 };
 
 var fetchByIsRead = function(isRead) {
-    console.log('fetchByIsRead')
     var condition = {
         where: {
             isRead: isRead

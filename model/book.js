@@ -10,17 +10,17 @@ module.exports = function(sequelize, DataTypes) {
         requester: {
             type: DataTypes.STRING,
             field: 'requester',
-            allowNull: false
+            allowNull: true
         },
         subject: {
             type: DataTypes.STRING,
             field: 'subject',
-            allowNull: false
+            allowNull: true
         },
         book_type: {
             type: DataTypes.STRING,
             field: 'book_type',
-            allowNull: false
+            allowNull: true
         },
         product_booking: {
             type: DataTypes.STRING,

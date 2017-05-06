@@ -78,25 +78,14 @@ exports.putBook = function(req, res) {
 
 exports.addRequest = function(req, res) {
 
-    // var channelHeader = req.headers['channel'];
-    var channel;
-    if (channelHeader) {
-        channel = parseInt(channelHeader);
-        if (!channel) {
-            console.log('channel isn\'t number');
-            res.status(400).end();
-            return;
-        }
-    } else {
-        res.status(400).end();
-    }
     var request = req.body;
     console.log('Ticket: ' + JSON.stringify(request));
-    var book = request.book;
 
+    var book = request.data;
     book.channel = request.channel;
     book.isRead = false;
     book.book_type = 'book_now';
+    console.log('Book: ' + JSON.stringify(book));
     console.log('Add book');
     book.isRead = false;
     bookService.addBook(book).then(function(d) {
