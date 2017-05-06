@@ -59,12 +59,12 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         },
         Latitude: {
-            type: DataTypes.STRING,
+            type: DataTypes.REAL,
             field: 'latitude',
             allowNull: true
         },
         Longitude: {
-            type: DataTypes.STRING,
+            type: DataTypes.REAL,
             field: 'longitude',
             allowNull: true
         },
