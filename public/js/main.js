@@ -28,13 +28,14 @@ function loadBookNowTab() {
 }
 
 function loadScheduleBookTab() {
-    $('#menuschedulebook').addClass('active');
-    $('#menubooknow').removeClass('active');
-    tab = SCHEDULEBOOK;
-    statusTab = true;
-    loadDataTable();
-    resetDetail();
-    enableButtonSend(false);
+    notify("Chức năng đang được cập nhật", "success");
+    // $('#menuschedulebook').addClass('active');
+    // $('#menubooknow').removeClass('active');
+    // tab = SCHEDULEBOOK;
+    // statusTab = true;
+    // loadDataTable();
+    // resetDetail();
+    // enableButtonSend(false);
 }
 
 function resetDetail() {
@@ -58,6 +59,7 @@ function approve() {
 
     if (!idRequester) {
         notify("Mã tài xế không được rỗng!", "danger");
+        $("#idRequester").focus();
         return;
     }
 
@@ -87,13 +89,14 @@ function approve() {
 }
 
 function setDataTable(data) {
+    // console.log(data);
     var str = ``;
     var length = data.length;
     data.map((valuse, index) => {
         // console.log(valuse.subject);
         let id = valuse.id;
-        let subject = valuse.subject;
-        let requester = valuse.requester;
+        let Phone = valuse.Phone;
+        let requester = valuse.CustName;
         let isRead = valuse.isRead;
         let classStatus = "unread";
         if (isRead) {
@@ -101,8 +104,8 @@ function setDataTable(data) {
         }
         str += `
             <tr class='${classStatus}' onclick="onClickTable('${id}', this)">
-                <td><i> ${subject} </i></td>
-                <td>${requester}</td>
+                <td><i> ${requester} </i></td>
+                <td>${Phone}</td>
             </tr>
         `;
     })
@@ -204,17 +207,17 @@ function setFormDetail(data) {
             product_booking: "",
             requester: "",
             status: 0,
-            subject: "Tiêu đề",
+            // subject: "Tiêu đề",
             status: ""
         }
     }
 
     $("#id").html(data.id);
-    $("#subject").html(data.subject);
-    $("#requester").html(data.requester);
-    $("#product_booking").html(data.product_booking);
-    $("#address_booking").html(data.address_booking);
-    $("#content").html(data.content);
+    $("#Phone").html(data.Phone);
+    $("#requester").html(data.CustName);
+    $("#product_booking").html(data.VehType);
+    $("#address_booking").html(data.Addr);
+    $("#content").html(data.GhiChu);
     $("#status").html(changeStatusToString(data.status));
 
     $("#idRequester").val("");
@@ -251,7 +254,7 @@ function onClickTable(id, event) {
     })
 
     request.done((result) => {
-        console.log(result);
+        // console.log(result);
         setFormData(result);
     })
 
@@ -314,7 +317,7 @@ function autoLoad() {
 function init() {
     enableButtonSend(false);
     loadNewData();
-    // autoLoad();
+    autoLoad();
 }
 
 init();

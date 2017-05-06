@@ -78,6 +78,11 @@ module.exports = function(sequelize, DataTypes) {
             field: 'phone',
             allowNull: true
         },
+        CustName: {
+            type: DataTypes.STRING,
+            field: 'cust_name',
+            allowNull: true
+        },
         Time: {
             type: DataTypes.DATE,
             field: 'time',
