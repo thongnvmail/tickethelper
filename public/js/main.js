@@ -320,7 +320,7 @@ function autoLoad() {
 function init() {
     enableButtonSend(false);
     loadNewData();
-    // autoLoad();
+    autoLoad();
 }
 
 init();
