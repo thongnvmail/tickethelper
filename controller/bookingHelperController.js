@@ -91,6 +91,7 @@ exports.addRequest = function(req, res) {
         res.status(400).end();
     }
     var book = req.body;
+    console.log('Ticket: ' + JSON.stringify(book));
     book.channel = channel;
     book.isRead = false;
     console.log('Add book');
