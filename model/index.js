@@ -26,6 +26,8 @@ var db = {};
 		var model = sequelize['import'](path.join(__dirname, file));
 		db[model.name] = model;
 	})
+	db['Book'].belongsTo(db['Car'], {foreignKey: 'car_id'});
+	// db['Car'].hasMany(db['Book'], {foreignKey: 'car_id'});
 })();
 
 // authenticate
@@ -42,6 +44,7 @@ var authenticate = function() {
 		});
 	});
 }
+
 // connect and sync to db
 var connect = function() {
 	return authenticate()

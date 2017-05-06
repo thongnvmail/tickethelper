@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bookingHelperController = require('../controller/bookingHelperController');
-var carController = require('../controller/carController');
+// var carController = require('../controller/carController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -22,6 +22,6 @@ router.post('/request', bookingHelperController.addRequest);
 router.put('/request/:id', bookingHelperController.putBook);
 
 /** Find one one */
-router.post('/car', carController.postIdCar);
+router.post('/car', bookingHelperController.postIdCar);
 
 module.exports = router;

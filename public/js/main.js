@@ -7,7 +7,7 @@ var statusTab = false;
 var SEND = 1;
 var UNSEND = 0;
 var CANCEL = -1;
-var STATUSSTRING = {
+var STATUS_STRING = {
     SEND: "Đã điều xe",
     UNSEND: "Chưa điều xe",
     CANCEL: "Đã hủy yêu cầu"
@@ -47,29 +47,37 @@ function setNumberNotify(numberBookNow, numberScheduleBook) {
 }
 
 function approve() {
-    var id = $("#idRequester").val();
+    var idRequester = $("#idRequester").val();
+    var idTicket = $("#id").html();
 
-    if (!id) {
+    var data = {
+        carId: idRequester,
+        bookId: idTicket
+    };
+    console.log(data);
+
+    if (!idRequester) {
         notify("Mã tài xế không được rỗng!", "danger");
         return;
     }
 
     var url = "/bookingHelper/car";
-    data = {
-        id: id
-    };
-    console.log(data);
+
     var request = $.ajax({
         url: url,
         method: "POST",
         data: data,
-        dataType: "JSON"
+        dataType: "JSON",
+        statusCode: {
+            404: function() {
+                notify("Không tìm thấy mã tài xế!", 'danger');
+            }
+        }
     })
 
     request.done((result) => {
         console.log(result);
-        console.log("Gửi thành công");
-        var message = 'Đã gửi yêu cầu thành công ' + id;
+        var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
         notify(message, 'success');
     })
 
@@ -140,26 +148,26 @@ function loadDataTable() {
     })
 }
 
-function updateStatus(data) {
-    var url = "/bookingHelper/request/" + data.id;
-    data.isRead = true;
-    var request = $.ajax({
-        url: url,
-        method: "PUT",
-        data: data,
-        dataType: "JSON"
-    })
+// function updateStatus(data) {
+//     var url = "/bookingHelper/request/" + data.id;
+//     data.isRead = true;
+//     var request = $.ajax({
+//         url: url,
+//         method: "PUT",
+//         data: data,
+//         dataType: "JSON"
+//     })
 
-    request.done((result) => {
-        console.log("Update status success");
-        // loadNewData();
-        // loadData();
-    })
+//     request.done((result) => {
+//         console.log("Update status success");
+//         // loadNewData();
+//         // loadData();
+//     })
 
-    request.fail((jqXHR, textStatus) => {
-        console.log(textStatus);
-    })
-}
+//     request.fail((jqXHR, textStatus) => {
+//         console.log(textStatus);
+//     })
+// }
 
 function changeStatusToString(status) {
     let classColor = "";
@@ -170,15 +178,15 @@ function changeStatusToString(status) {
     }
     if (status == SEND) {
         classColor = "send";
-        result = STATUSSTRING.SEND;
+        result = STATUS_STRING.SEND;
     }
     if (status == UNSEND) {
         classColor = "unsend";
-        result = STATUSSTRING.UNSEND;
+        result = STATUS_STRING.UNSEND;
     }
     if (status == CANCEL) {
         classColor = "cancel";
-        result = STATUSSTRING.CANCEL;
+        result = STATUS_STRING.CANCEL;
     }
 
     $("#status").attr('class', classColor);
@@ -216,11 +224,7 @@ function setFormData(data) {
 
     setFormDetail(data);
 
-    if (!data.isRead) {
-        updateStatus(data);
-    }
-
-    if (data.id) {
+    if (data.status === 0) {
         enableButtonSend(true);
     } else {
         enableButtonSend(false);
@@ -299,16 +303,13 @@ function getCarById() {
     })
 }
 
-
 function autoLoad() {
     setTimeout(function() {
         loadNewData();
         loadDataTable();
         autoLoad();
-    }, 500);
+    }, 1000);
 }
-
-
 
 function init() {
     enableButtonSend(false);
@@ -316,4 +317,4 @@ function init() {
     autoLoad();
 }
 
-// init();
+init();

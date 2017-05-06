@@ -9,3 +9,5 @@
 }
 
 POST  https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted. Data is waiting fonfirm.
+
+Token: 93cd84d7-7c92-429d-b252-50da999aa568

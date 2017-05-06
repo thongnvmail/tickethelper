@@ -84,7 +84,7 @@ var update = function(entity, data, condition) {
     return model[entity].update(data, condition).then(function() {
         return result.successMessageFactory();
     }).catch(function(error) {
-        console.log(error);
+        console.log(console.log(JSON.stringify(error)));
         throw result.databaseErrorMessageFactory();
     });
 };
