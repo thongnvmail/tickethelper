@@ -57,8 +57,8 @@ function approve(idTicket, StridRequester) {
     console.log(data);
 
     if (!idRequester) {
+        $("#" + StridRequester).focus();
         notify("Mã tài xế không được rỗng!", "danger");
-        $("#idRequester").focus();
         return;
     }
 
@@ -83,7 +83,8 @@ function approve(idTicket, StridRequester) {
         console.log(result);
         var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
         notify(message, 'success');
-        enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
+        // enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
+        loadDataTable();
     })
 
     request.fail((jqXHR, textStatus) => {
@@ -126,7 +127,7 @@ function setDataTable(data) {
                     <button type="button" class="btn btn-success" id="btnSend${id}" onclick="approve(${id}, 'idRequester${id}')" ${isEnable}>Gửi</button>
                 </td>
                 <td><i> ${Time} </i></td>
-                <td class="${classColorStatus}">${status}</td>
+                <td class="${classColorStatus}" id="status${id}">${status}</td>
                 <td>${Phone}</td>
                 <td><i> ${requester} </i></td>
                 <td><i> ${VehType} </i></td>
@@ -140,12 +141,6 @@ function setDataTable(data) {
     $("#datatable").html(str);
     $("#total").html(length);
     lengtItemCurrent = length;
-}
-
-function formatTime(Time) {
-    Time = new Date(Time);
-    return Time.getDay() + '/' + Time.getMonth() + '/' + Time.getFullYear() + '<br>' +
-        Time.getHours() + ':' + Time.getMinutes() + ':' + Time.getSeconds();
 }
 
 function loadDataTable() {

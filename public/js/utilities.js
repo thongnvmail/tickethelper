@@ -10,3 +10,9 @@ function notify(message, type) {
         timer: 1000
     });
 }
+
+function formatTime(Time) {
+    Time = new Date(Time);
+    return Time.getDay() + '/' + Time.getMonth() + '/' + Time.getFullYear() + '<br>' +
+        Time.getHours() + ':' + Time.getMinutes() + ':' + Time.getSeconds();
+}
