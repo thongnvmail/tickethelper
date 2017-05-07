@@ -24,7 +24,6 @@ function loadBookNowTab() {
     statusTab = true;
     loadDataTable();
     resetDetail();
-    enableButtonSend(false);
 }
 
 function loadScheduleBookTab() {
@@ -47,9 +46,9 @@ function setNumberNotify(numberBookNow, numberScheduleBook) {
     $("#notifyschedulebook").html(numberScheduleBook);
 }
 
-function approve() {
-    var idRequester = $("#idRequester").val();
-    var idTicket = $("#id").html();
+function approve(idTicket, StridRequester) {
+    var idRequester = $("#" + StridRequester).val();
+    // var idTicket = $("#id").html();
 
     var data = {
         carId: idRequester,
@@ -84,6 +83,7 @@ function approve() {
         console.log(result);
         var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
         notify(message, 'success');
+        enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
     })
 
     request.fail((jqXHR, textStatus) => {
@@ -92,23 +92,45 @@ function approve() {
 }
 
 function setDataTable(data) {
-    // console.log(data);
+    console.log(data);
     var str = ``;
     var length = data.length;
     data.map((valuse, index) => {
         // console.log(valuse.subject);
         let id = valuse.id;
+        let status = changeStatusToString(valuse.status).string;
+        let classColorStatus = changeStatusToString(valuse.status).classColor;
         let Phone = valuse.Phone;
         let requester = valuse.CustName;
+        let VehType = valuse.VehType;
+        let Addr = valuse.Addr;
+        let GhiChu = valuse.GhiChu;
+
         let isRead = valuse.isRead;
         let classStatus = "unread";
         if (isRead) {
             classStatus = "read";
         }
+
+        let isEnable = "disabled";
+        if (valuse.status == 0) {
+            isEnable = "";
+        }
         str += `
             <tr class='${classStatus}' onclick="onClickTable('${id}', this)">
-                <td><i> ${requester} </i></td>
+                
+                <td>${id}</td>
+                <td><input  type="text" class="form-control" id="idRequester${id}" ${isEnable}></td>
+                <td>
+                    <button type="button" class="btn btn-success" id="btnSend${id}" onclick="approve(${id}, 'idRequester${id}')" ${isEnable}>Gửi yêu cầu</button>
+                </td>
+                <td class="${classColorStatus}">${status}</td>
                 <td>${Phone}</td>
+                <td><i> ${requester} </i></td>
+                <td><i> ${VehType} </i></td>
+                <td><i> ${Addr} </i></td>
+                <td><i> ${GhiChu} </i></td>
+
             </tr>
         `;
     })
@@ -176,26 +198,27 @@ function loadDataTable() {
 // }
 
 function changeStatusToString(status) {
-    let classColor = "";
-    let result = "";
+    // let classColor = "";
+    let result = {};
 
     if (status === "") {
-        return "";
+        result.classColor = "";
+        result.string = "";
     }
     if (status == SEND) {
-        classColor = "send";
-        result = STATUS_STRING.SEND;
+        result.classColor = "send";
+        result.string = STATUS_STRING.SEND;
     }
     if (status == UNSEND) {
-        classColor = "unsend";
-        result = STATUS_STRING.UNSEND;
+        result.classColor = "unsend";
+        result.string = STATUS_STRING.UNSEND;
     }
     if (status == CANCEL) {
-        classColor = "cancel";
-        result = STATUS_STRING.CANCEL;
+        result.classColor = "cancel";
+        result.string = STATUS_STRING.CANCEL;
     }
 
-    $("#status").attr('class', classColor);
+    // $("#status").attr('class', classColor);
     return result;
 }
 
@@ -226,29 +249,28 @@ function setFormDetail(data) {
     $("#idRequester").val("");
 }
 
-function setFormData(data) {
+// function setFormData(data) {
 
-    setFormDetail(data);
+//     setFormDetail(data);
 
-    if (data.status === 0) {
-        enableButtonSend(true);
-    } else {
-        enableButtonSend(false);
-    }
-}
+//     if (data.status === 0) {
+//         enableButtonSend(true);
+//     } else {
+//         enableButtonSend(false);
+//     }
+// }
 
-function enableButtonSend(isEnable) {
+function enableButtonSend(idRequester, btnSend, isEnable) {
     let disabled = "disabled";
-    if (isEnable) {
-        disabled = false;
+    if (isEnable === 0) {
+        disabled = "";
     }
-    $("#idRequester").attr('disabled', disabled);
-    $("#btnSend").attr('disabled', disabled);
+    $("#" + idRequester).attr('disabled', disabled);
+    $("#" + btnSend).attr('disabled', disabled);
 }
 
 function onClickTable(id, event) {
     // console.log(event);
-    $(event).removeClass();
     var url = "/bookingHelper/request/" + id;
     var request = $.ajax({
         url: url,
@@ -257,8 +279,9 @@ function onClickTable(id, event) {
     })
 
     request.done((result) => {
+        $(event).removeClass();
         // console.log(result);
-        setFormData(result);
+        // setFormData(result);
     })
 
     request.fail((jqXHR, textStatus) => {
@@ -318,8 +341,7 @@ function autoLoad() {
 }
 
 function init() {
-    enableButtonSend(false);
-    loadNewData();
+    // enableButtonSend(false);
     autoLoad();
 }
 

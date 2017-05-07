@@ -113,17 +113,6 @@ exports.postIdCar = function(req, res) {
                 requestData.vehicle_plate = car.vehicleNumber;
                 requestData.driver_code = car.id;
                 console.log('requestData: ' + JSON.stringify(requestData));
-                return bookService.updateBook(bookId, { status: 1, car_id: car.id });
-            }
-        })
-        .then((updateStatus) => {
-            if (!updateStatus) {
-                return null;
-            }
-            console.log('Update status: ' + JSON.stringify(updateStatus));
-            if (updateStatus.responseCode !== 0) {
-                res.status(500).end();
-            } else {
                 return bookService.fetchOne(bookId);
             }
         })
@@ -140,28 +129,54 @@ exports.postIdCar = function(req, res) {
             requestData.driver_name = null;
             requestData.driver_mobile = null;
 
-            console.log('requestData: ' + JSON.stringify(requestData));
-            var headers = {
-                'Authorization': token
-            }
+            // console.log('requestData: ' + JSON.stringify(requestData));
+            // var headers = {
+            //     'Authorization': token
+            // }
 
-            // Configure the request
-            var options = {
-                url: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
-                method: 'POST',
-                headers: headers
+            // // Configure the request
+            // var options = {
+            //     url: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
+            //     method: 'POST',
+            //     headers: headers
+            // }
+            // var status = 0;
+            // // Start the request
+            // request(options, function(error, response, body) {
+            //     console.log('Respone body: ' + JSON.stringify(body));
+            //     console.log('Respone: ' + JSON.stringify(response));
+            //     status = response.statusCode;
+            //     if (body.error_code === 0) {
+            //         res.status(200).json(requestData);
+            //         // bookService.updateBook(bookId, { status: 1, car_id: car.id }).then(updateStatus);
+            //     } else {
+            //         console.log('Error');
+            //         res.status(500).json({ message: 'Request failed' }).end();
+            //     }
+            // });
+            return sendInformAcceptRequest(requestData);
+        })
+        .then((response) => {
+            var body = response.body;
+            if (body && body.statusCode === 0) {
+                console.log('Send request sucessfully');
+                return bookService.updateBook(bookId, { status: 1, car_id: car.id });
+            } else {
+                console.log('Send request failed');
+                res.status(500).end();
+                return null;
             }
-
-            // Start the request
-            request(options, function(error, response, body) {
-                console.log('Respone body: ' + JSON.stringify(body));
-                if (body.error_code === 0) {
-                    res.status(200).json(requestData);
-                } else {
-                    console.log('Error');
-                    res.status(500).json({ message: 'Request failed' }).end();
-                }
-            });
+        })
+        .then((updateStatus) => {
+            if (!updateStatus) {
+                return null;
+            }
+            console.log('Update status: ' + JSON.stringify(updateStatus));
+            if (updateStatus.responseCode !== 0) {
+                res.status(500).end();
+            } else {
+                res.status(200).end();
+            }
         })
         .catch((err) => {
             // console.log(console.log(JSON.stringify(err)));
@@ -221,4 +236,28 @@ function sendInformAcceptRequest(data) {
     //         return false;
     //     }
     // })
+
+    return new Promise((resolve, reject) => {
+        var headers = {
+            'Authorization': token
+        }
+
+        // Configure the request
+        var options = {
+            url: 'https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted',
+            method: 'POST',
+            headers: headers
+        }
+        var status = 0;
+        // Start the request
+        request(options, (error, response, body) => {
+            if (error) {
+                console.log('Send request failed: ' + JSON.stringify(error));
+                reject();
+            } else {
+                resolve(response);
+            }
+        });
+
+    });
 }
