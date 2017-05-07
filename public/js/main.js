@@ -1,3 +1,6 @@
+var isLoadData = false;
+var lengtCurrentBook_now = 0;
+
 var lengthItemNew = 0;
 var lengtItemCurrent = 0;
 var isInit = true;
@@ -152,26 +155,28 @@ function loadDataTable() {
     })
 
     request.done((result) => {
+        isLoadData = true;
         var data = result.book_now;
-        if (tab != BOOKNOW) {
-            data = result.schedule_book;
-        }
-        var length = data.length;
-        console.log(lengtItemCurrent);
-        if (isInit) {
-            setDataTable(data);
-            isInit = false;
-        } else {
-            if (length > lengtItemCurrent) {
-                setDataTable(data);
-            } else {
-                if (statusTab) {
-                    setDataTable(data);
-                    lengtItemCurrent = length;
-                    statusTab = false;
-                }
-            }
-        }
+        setDataTable(data);
+        // if (tab != BOOKNOW) {
+        //     data = result.schedule_book;
+        // }
+        // var length = data.length;
+        // console.log(lengtItemCurrent);
+        // if (isInit) {
+        //     setDataTable(data);
+        //     isInit = false;
+        // } else {
+        //     if (length > lengtItemCurrent) {
+        //         setDataTable(data);
+        //     } else {
+        //         if (statusTab) {
+        //             setDataTable(data);
+        //             lengtItemCurrent = length;
+        //             statusTab = false;
+        //         }
+        //     }
+        // }
     })
 
     request.fail((jqXHR, textStatus) => {
@@ -283,6 +288,7 @@ function onClickTable(id, event) {
 
     request.done((result) => {
         $(event).removeClass();
+        lengtCurrentBook_now = lengtCurrentBook_now - 1;
         // console.log(result);
         // setFormData(result);
     })
@@ -304,6 +310,17 @@ function loadNewData() {
         // console.log(result.book_now);
         var book_now = result.book_now;
         var schedule_book = result.schedule_book;
+
+        console.log(book_now.length + ' = ' + lengtCurrentBook_now);
+        if (book_now.length > lengtCurrentBook_now) {
+            loadDataTable();
+            lengtCurrentBook_now = book_now.length;
+        }
+
+        if (book_now.length < lengtCurrentBook_now) {
+            loadDataTable();
+            lengtCurrentBook_now = book_now.length;
+        }
 
         setNumberNotify(book_now.length, schedule_book.length);
     })
@@ -338,7 +355,9 @@ function getCarById() {
 function autoLoad() {
     setTimeout(function() {
         loadNewData();
-        loadDataTable();
+        if (!isLoadData) {
+            loadDataTable();
+        }
         autoLoad();
     }, 1000);
 }

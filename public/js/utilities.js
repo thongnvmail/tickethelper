@@ -13,6 +13,6 @@ function notify(message, type) {
 
 function formatTime(Time) {
     Time = new Date(Time);
-    return Time.getDay() + '/' + Time.getMonth() + '/' + Time.getFullYear() + '<br>' +
+    return Time.getDate() + '/' + (Time.getMonth() + 1) + '/' + Time.getFullYear() + '<br>' +
         Time.getHours() + ':' + Time.getMinutes() + ':' + Time.getSeconds();
 }
