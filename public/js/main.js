@@ -104,6 +104,7 @@ function setDataTable(data) {
         let requester = valuse.CustName;
         let VehType = valuse.VehType;
         let Addr = valuse.Addr;
+        let Time = formatTime(valuse.Time);
         let GhiChu = valuse.GhiChu;
 
         let isRead = valuse.isRead;
@@ -122,8 +123,9 @@ function setDataTable(data) {
                 <td>${id}</td>
                 <td><input  type="text" class="form-control" id="idRequester${id}" ${isEnable}></td>
                 <td>
-                    <button type="button" class="btn btn-success" id="btnSend${id}" onclick="approve(${id}, 'idRequester${id}')" ${isEnable}>Gửi yêu cầu</button>
+                    <button type="button" class="btn btn-success" id="btnSend${id}" onclick="approve(${id}, 'idRequester${id}')" ${isEnable}>Gửi</button>
                 </td>
+                <td><i> ${Time} </i></td>
                 <td class="${classColorStatus}">${status}</td>
                 <td>${Phone}</td>
                 <td><i> ${requester} </i></td>
@@ -138,6 +140,12 @@ function setDataTable(data) {
     $("#datatable").html(str);
     $("#total").html(length);
     lengtItemCurrent = length;
+}
+
+function formatTime(Time) {
+    Time = new Date(Time);
+    return Time.getDay() + '/' + Time.getMonth() + '/' + Time.getFullYear() + '<br>' +
+        Time.getHours() + ':' + Time.getMinutes() + ':' + Time.getSeconds();
 }
 
 function loadDataTable() {
