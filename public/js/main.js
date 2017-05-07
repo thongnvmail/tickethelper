@@ -122,7 +122,7 @@ function setDataTable(data) {
             isEnable = "";
         }
         str += `
-            <tr class='${classStatus}' onclick="onClickTable('${id}', this)">
+            <tr class='${classStatus}' onclick="onClickTable('${id}', this, ${isRead})">
                 
                 <td>${id}</td>
                 <td><input  type="text" class="form-control" id="idRequester${id}" ${isEnable}></td>
@@ -157,26 +157,25 @@ function loadDataTable() {
     request.done((result) => {
         isLoadData = true;
         var data = result.book_now;
-        setDataTable(data);
-        // if (tab != BOOKNOW) {
-        //     data = result.schedule_book;
-        // }
-        // var length = data.length;
-        // console.log(lengtItemCurrent);
-        // if (isInit) {
-        //     setDataTable(data);
-        //     isInit = false;
-        // } else {
-        //     if (length > lengtItemCurrent) {
-        //         setDataTable(data);
-        //     } else {
-        //         if (statusTab) {
-        //             setDataTable(data);
-        //             lengtItemCurrent = length;
-        //             statusTab = false;
-        //         }
-        //     }
-        // }
+        if (tab != BOOKNOW) {
+            data = result.schedule_book;
+        }
+        var length = data.length;
+        console.log(lengtItemCurrent);
+        if (isInit) {
+            setDataTable(data);
+            isInit = false;
+        } else {
+            if (length > lengtItemCurrent) {
+                setDataTable(data);
+            } else {
+                if (statusTab) {
+                    setDataTable(data);
+                    lengtItemCurrent = length;
+                    statusTab = false;
+                }
+            }
+        }
     })
 
     request.fail((jqXHR, textStatus) => {
@@ -277,7 +276,7 @@ function enableButtonSend(idRequester, btnSend, isEnable) {
     $("#" + btnSend).attr('disabled', disabled);
 }
 
-function onClickTable(id, event) {
+function onClickTable(id, event, isRead) {
     // console.log(event);
     var url = "/bookingHelper/request/" + id;
     var request = $.ajax({
@@ -288,7 +287,7 @@ function onClickTable(id, event) {
 
     request.done((result) => {
         $(event).removeClass();
-        lengtCurrentBook_now = lengtCurrentBook_now - 1;
+
         // console.log(result);
         // setFormData(result);
     })
@@ -312,12 +311,7 @@ function loadNewData() {
         var schedule_book = result.schedule_book;
 
         console.log(book_now.length + ' = ' + lengtCurrentBook_now);
-        if (book_now.length > lengtCurrentBook_now) {
-            loadDataTable();
-            lengtCurrentBook_now = book_now.length;
-        }
-
-        if (book_now.length < lengtCurrentBook_now) {
+        if (book_now.length != lengtCurrentBook_now) {
             loadDataTable();
             lengtCurrentBook_now = book_now.length;
         }
