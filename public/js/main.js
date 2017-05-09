@@ -16,6 +16,15 @@ var STATUS_STRING = {
     CANCEL: "Đã hủy yêu cầu"
 }
 
+var VEHTYPE_STRING = {
+    1: "Bất kỳ",
+    2: "Thành Công car bất kỳ",
+    3: "Thành công sân bay",
+    4: "4 chỗ giá rẻ",
+    5: "5 chỗ cao cấp",
+    7: "7 chỗ"
+}
+
 var BOOKNOW = "booknow";
 var SCHEDULEBOOK = "schedulebook";
 var tab = BOOKNOW;
@@ -106,7 +115,7 @@ function setDataTable(data) {
         let classColorStatus = changeStatusToString(valuse.status).classColor;
         let Phone = valuse.Phone;
         let requester = valuse.CustName;
-        let VehType = valuse.VehType;
+        let VehType = changeVehTypeToString(valuse.VehType);
         let Addr = valuse.Addr;
         let Time = formatTime(valuse.Time);
         let GhiChu = valuse.GhiChu;
@@ -227,6 +236,10 @@ function changeStatusToString(status) {
 
     // $("#status").attr('class', classColor);
     return result;
+}
+
+function changeVehTypeToString(VehType) {
+    return VEHTYPE_STRING[VehType];
 }
 
 function setFormDetail(data) {
