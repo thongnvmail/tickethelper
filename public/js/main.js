@@ -87,17 +87,24 @@ function approve(idTicket, StridRequester) {
             },
             500: () => {
                 notify("Gửi request thất bại!", 'danger');
+            }, 
+            200: (result) => {
+                console.log(result);
+                var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
+                notify(message, 'success');
+                // enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
+                loadDataTable();
             }
         }
     })
 
-    request.done((result) => {
-        console.log(result);
-        var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
-        notify(message, 'success');
-        // enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
-        loadDataTable();
-    })
+    // request.done((result) => {
+    //     console.log(result);
+    //     var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
+    //     notify(message, 'success');
+    //     // enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
+    //     loadDataTable();
+    // })
 
     request.fail((jqXHR, textStatus) => {
         console.log(textStatus);
