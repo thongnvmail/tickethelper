@@ -59,6 +59,8 @@ function setNumberNotify(numberBookNow, numberScheduleBook) {
 }
 
 function approve(idTicket, StridRequester) {
+    lockPage();
+
     var idRequester = $("#" + StridRequester).val();
     // var idTicket = $("#id").html();
 
@@ -71,6 +73,7 @@ function approve(idTicket, StridRequester) {
     if (!idRequester) {
         $("#" + StridRequester).focus();
         notify("Mã tài xế không được rỗng!", "danger");
+        unLockPage();
         return;
     }
 
@@ -84,16 +87,22 @@ function approve(idTicket, StridRequester) {
         statusCode: {
             404: () => {
                 notify("Không tìm thấy mã tài xế!", 'danger');
+                unLockPage();
             },
             500: () => {
                 notify("Gửi request thất bại!", 'danger');
-            }, 
+                unLockPage();
+            },
             200: (result) => {
                 console.log(result);
                 var message = `Đã gửi yêu cầu cho ticket có mã ${idTicket} thành công!`;
                 notify(message, 'success');
-                // enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
-                loadDataTable();
+                enableButtonSend("idRequester" + idTicket, "btnSend" + idTicket, 1);
+                $("#status" + idTicket).html(STATUS_STRING.SEND);
+                $("#status" + idTicket).removeClass("unsend");
+                $("#status" + idTicket).addClass("send");
+                unLockPage();
+                // loadDataTable();
             }
         }
     })
@@ -108,6 +117,7 @@ function approve(idTicket, StridRequester) {
 
     request.fail((jqXHR, textStatus) => {
         console.log(textStatus);
+        unLockPage();
     })
 }
 
@@ -171,6 +181,7 @@ function loadDataTable() {
     })
 
     request.done((result) => {
+        unLockPage();
         isLoadData = true;
         var data = result.book_now;
         if (tab != BOOKNOW) {
@@ -364,6 +375,20 @@ function getCarById() {
     request.fail((jqXHR, textStatus) => {
         console.log(textStatus);
     })
+}
+
+function unLockPage() {
+    document.getElementById("loader").style.display = "none";
+    // document.getElementById("myDiv").style.display = "block";
+    document.getElementById("loader").style.zIndex = -1;
+    document.getElementById("myDiv").style.zIndex = 1;
+}
+
+function lockPage() {
+    document.getElementById("loader").style.display = "block";
+    // document.getElementById("myDiv").style.display = "none";
+    document.getElementById("loader").style.zIndex = 1;
+    document.getElementById("myDiv").style.zIndex = -1;
 }
 
 function autoLoad() {
