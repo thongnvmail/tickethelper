@@ -125,26 +125,26 @@ function setDataTable(data) {
     console.log(data);
     var str = ``;
     var length = data.length;
-    data.map((valuse, index) => {
+    data.map((value, index) => {
         // console.log(valuse.subject);
-        let id = valuse.id;
-        let status = changeStatusToString(valuse.status).string;
-        let classColorStatus = changeStatusToString(valuse.status).classColor;
-        let Phone = valuse.Phone;
-        let requester = valuse.CustName;
-        let VehType = changeVehTypeToString(valuse.VehType);
-        let Addr = valuse.Addr;
-        let Time = formatTime(valuse.Time);
-        let GhiChu = valuse.GhiChu;
+        let id = value.id ? value.id : '';
+        let status = changeStatusToString(value.status).string;
+        let classColorStatus = changeStatusToString(value.status).classColor;
+        let Phone = value.Phone ? value.Phone : '';
+        let requester = value.CustName ? value.CustName : '';
+        let VehType = changeVehTypeToString(value.VehType);
+        let Addr = value.Addr ? value.Addr : '';
+        let Time = formatTime(value.Time);
+        let GhiChu = value.GhiChu ? value.GhiChu : '';
 
-        let isRead = valuse.isRead;
+        let isRead = value.isRead;
         let classStatus = "unread";
         if (isRead) {
             classStatus = "read";
         }
 
         let isEnable = "disabled";
-        if (valuse.status == 0) {
+        if (value.status == 0) {
             isEnable = "";
         }
         str += `
@@ -275,14 +275,22 @@ function setFormDetail(data) {
             status: ""
         }
     }
+    // check data
+    var id = data.id ? data.id : '';
+    var Phone = data.Phone ? data.Phone : '';
+    var requester = data.requester ? data.requester : '';
+    var product_booking = data.product_booking ? data.product_booking : '';
+    var address_booking = data.address_booking ? data.address_booking : '';
+    var content = data.content ? data.content : '';
+    var id = data.id ? data.id : '';
 
-    $("#id").html(data.id);
-    $("#Phone").html(data.Phone);
-    $("#requester").html(data.CustName);
-    $("#product_booking").html(data.VehType);
-    $("#address_booking").html(data.Addr);
-    $("#content").html(data.GhiChu);
-    $("#status").html(changeStatusToString(data.status));
+    $("#id").html(id);
+    $("#Phone").html(Phone);
+    $("#requester").html(CustName);
+    $("#product_booking").html(VehType);
+    $("#address_booking").html(Addr);
+    $("#content").html(GhiChu);
+    $("#status").html(changeStatusToString(status));
 
     $("#idRequester").val("");
 }
@@ -380,14 +388,14 @@ function getCarById() {
 function unLockPage() {
     document.getElementById("loader").style.display = "none";
     // document.getElementById("myDiv").style.display = "block";
-    document.getElementById("loader").style.zIndex = -1;
+    document.getElementById("background-loader").style.zIndex = -1;
     document.getElementById("myDiv").style.zIndex = 1;
 }
 
 function lockPage() {
     document.getElementById("loader").style.display = "block";
     // document.getElementById("myDiv").style.display = "none";
-    document.getElementById("loader").style.zIndex = 1;
+    document.getElementById("background-loader").style.zIndex = 1;
     document.getElementById("myDiv").style.zIndex = -1;
 }
 
