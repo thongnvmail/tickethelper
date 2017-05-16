@@ -39,14 +39,14 @@ function loadBookNowTab() {
 }
 
 function loadScheduleBookTab() {
-    notify("Chức năng đang được cập nhật", "success");
-    // $('#menuschedulebook').addClass('active');
-    // $('#menubooknow').removeClass('active');
-    // tab = SCHEDULEBOOK;
-    // statusTab = true;
-    // loadDataTable();
-    // resetDetail();
-    // enableButtonSend(false);
+    //notify("Chức năng đang được cập nhật", "success");
+    $('#menuschedulebook').addClass('active');
+    $('#menubooknow').removeClass('active');
+    tab = SCHEDULEBOOK;
+    statusTab = true;
+    loadDataTable();
+    resetDetail();
+    enableButtonSend(false);
 }
 
 function resetDetail() {
