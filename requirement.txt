@@ -12,9 +12,9 @@ POST  https://gk2s-fb-bot3.herokuapp.com/bot/informAccepted. Data is waiting fon
 
 Token: 93cd84d7-7c92-429d-b252-50da999aa568
 
-
+Push len github
 git init
 git add . 
 git commit -m "first commit"
-git remote add origin https://github.com/username/project.git53
+git remote add origin https://github.com/thongnvmail/tickethelper.git
 git push -u origin master
