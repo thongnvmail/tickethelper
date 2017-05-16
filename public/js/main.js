@@ -17,7 +17,7 @@ var STATUS_STRING = {
 }
 
 var VEHTYPE_STRING = {
-    1: "Bất kỳ 1",
+    1: "Bất kỳ",
     2: "Thành Công car bất kỳ",
     3: "Thành công sân bay",
     4: "4 chỗ giá rẻ",
