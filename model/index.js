@@ -27,6 +27,7 @@ var db = {};
 		db[model.name] = model;
 	})
 	db['Book'].belongsTo(db['Car'], {foreignKey: 'car_id'});
+	db['logs'];
 	// db['Car'].hasMany(db['Book'], {foreignKey: 'car_id'});
 })();
 
